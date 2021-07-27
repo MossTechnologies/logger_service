@@ -1,0 +1,61 @@
+name: Test FastAPI Telebot Service
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: python:3.9.1
+
+    env:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      GITHUB_ACTIONS: "True"
+
+    steps:
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#1390d4'
+          SLACK_MESSAGE: "Тестування розпочато :rocket:"
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+#      - name: Install dependencies
+#        run: pipenv install --system --deploy --ignore-pipfile
+#
+#      - name: Make migrations
+#        run: python manage.py makemigrations
+#
+#      - name: Migrate to test database
+#        run: python manage.py migrate
+#
+#      - name: Run tests
+#        run: ./manage.py test
+
+      - name: automerge
+        if: ${{ success() }}
+        uses: "pascalgn/automerge-action@v0.13.0"
+        env:
+          GITHUB_TOKEN: "${{ secrets.REPO_TOKEN }}"
+
+      - name: Slack Notification Failed
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#d41326'
+          SLACK_MESSAGE: "Тестування провалено :no_entry:"
+
+      - name: Slack Notification Success
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#35b035'
+          SLACK_MESSAGE: "Тестування пройшло успішно :white_check_mark:"
