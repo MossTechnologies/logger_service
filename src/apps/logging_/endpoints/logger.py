@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 
 from src.apps.logging_.services.logs import LogsBrowser, Logs
 from src.apps.logging_.services.projects import Project
-from src.apps.logging_.services.system_info_model_wrapper import (
+from src.apps.logging_.services.system_info_model import (
     create_system_info_model
 )
 from src.apps.logging_.schemas import AllLogInfo

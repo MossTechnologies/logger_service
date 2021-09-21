@@ -4,8 +4,8 @@ from mongoengine.errors import DoesNotExist
 from typing import Optional
 
 from src.apps.logging_ import models
-from src.apps.logging_.services.related_to_json import (
-    related_system_info_to_json
+from src.apps.logging_.services.related_mongo_field_to_json import (
+    related_system_info_field_to_json
 )
 
 
@@ -59,6 +59,6 @@ class LogsBrowser:
 
         offset_logs = json.loads(logs.to_json())
         
-        related_system_info_to_json(logs, offset_logs)
+        related_system_info_field_to_json(logs, offset_logs)
 
         return offset_logs
